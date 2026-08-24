@@ -324,7 +324,7 @@ func f() {
 
 	for path, want := range map[string]string{
 		filepath.Join(cmdDir, "commands.go"):     `os.MkdirTemp("", "umeshnode")`,
-		filepath.Join(appDir, "app.go"):          `const appName = "UmeshnodeApp"`,
+		filepath.Join(appDir, "app.go"):          `const appName = "UmeshNodeApp"`,
 		filepath.Join(appDir, "test_helpers.go"): `os.MkdirTemp("", "umesh")`,
 	} {
 		b, err := os.ReadFile(path)
