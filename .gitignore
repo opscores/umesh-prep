@@ -1,3 +1,7 @@
+# Generated output (README: utility writes into ./src and ./umesh-tree)
+/src/
+/umesh-tree/
+
 # Build artifacts
 /umeshprep
 /dist/

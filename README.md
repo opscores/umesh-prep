@@ -6,7 +6,7 @@
 v0.54 + CometBFT**. Она зеркалирует скрипт
 `scripts/common/prepare-umesh-from-wasmd.sh`, но переписан как
 standalone-утилита на Go (модуль
-`github.com/umesh-network/umeshctl/umeshprep`) без внешних shell-зависимостей.
+`github.com/opscores/umesh-prep`) без внешних shell-зависимостей.
 
 Задачи `umeshprep`:
 
@@ -56,8 +56,8 @@ standalone-утилита на Go (модуль
   `GOPROXY`.
 
 ```bash
-git clone git@github.com:umesh-network/umeshctl.git   # или opscores/umesh-prep
-cd umeshctl/umeshprep
+git clone git@github.com:opscores/umesh-prep.git
+cd umesh-prep
 go build -o umeshprep .
 ```
 
@@ -210,7 +210,7 @@ umeshprep -enable-ibc=false -enable-feegrant=false -enable-authz=false
 
 | Симптом | Причина | Как поправить |
 | ------- | ------- | ------------- |
-| `Preflight: image not found` | Нет образа `umesh-node` | Соберите его в репозитории `Node_Umesh`: `docker build -t umesh-node:latest -f Dockerfile .` |
+| `Preflight: image not found` | Нет образа `umesh-node` | Соберите его в репозитории `opscores/umesh-node`: `docker build -t umesh-node:latest -f Dockerfile .` |
 | `module "..." requires "..." which is disabled` | Несогласованный набор флагов `-enable-*` | Включите зависимую — например, для `ibc` нужен `evidence` (core, включён) |
 | `wasmkeeper.BuiltInCapabilities() not found in app/app.go` | Версия wasmd отличается от `v0.70.3` | Задайте `-wasmd-version` под ваш дерево, либо поправьте `patchCapabilities` |
 | `capability patch produced incomplete result (missing ...)` | capabilities пересекаются с удалённым IBC | Проверьте, чтобы включённые модули покрывали запрошенные capabilities (особенно `ibc2`) |
@@ -229,5 +229,5 @@ go build -o umeshprep .
 ```
 
 > `umeshprep` собирает дерево Umesh, а **сам** репозиторий `umesh-prep` хранит
-> исходники утилиты. Docker-образ `umesh-node` и `docker-compose.yml живут в
-> репозитории `Node_Umesh` и собираются отдельно.
+> исходники утилиты. Docker-образ `umesh-node` и `docker-compose.yml` живут в
+> репозитории `opscores/umesh-node` и собираются отдельно.

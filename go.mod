@@ -1,3 +1,3 @@
-module github.com/umesh-network/umeshctl/umeshprep
+module github.com/opscores/umesh-prep
 
 go 1.25.0
