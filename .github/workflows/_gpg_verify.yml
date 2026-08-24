@@ -1,7 +1,9 @@
 name: GPG Key Verify
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - dev
 
 permissions:
   contents: read
