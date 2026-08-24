@@ -275,7 +275,7 @@ var Upgrades = []upgrades.Upgrade{v060.Upgrade}
 // TestPatchStringLiterals verifies the temp dir prefixes and BaseApp name are
 // rewritten from the wasmd/simapp literals.
 func TestPatchStringLiterals(t *testing.T) {
-	cfg := config{binaryName: "umeshd", bech32Prefix: "umesh"}
+	cfg := config{binaryName: "umeshnode", bech32Prefix: "umesh"}
 	dir := t.TempDir()
 
 	cmdDir := filepath.Join(dir, "cmd", cfg.binaryName)
@@ -323,8 +323,8 @@ func f() {
 	}
 
 	for path, want := range map[string]string{
-		filepath.Join(cmdDir, "commands.go"):     `os.MkdirTemp("", "umeshd")`,
-		filepath.Join(appDir, "app.go"):          `const appName = "UmeshApp"`,
+		filepath.Join(cmdDir, "commands.go"):     `os.MkdirTemp("", "umeshnode")`,
+		filepath.Join(appDir, "app.go"):          `const appName = "UmeshnodeApp"`,
 		filepath.Join(appDir, "test_helpers.go"): `os.MkdirTemp("", "umesh")`,
 	} {
 		b, err := os.ReadFile(path)

@@ -12,7 +12,7 @@ standalone-утилита на Go (модуль
 
 - клонировать wasmd на зафиксированной версии (shallow clone, `--depth 1`);
 - переименовать Go-модуль (`github.com/CosmWasm/wasmd` → ваш форк, по умолчанию
-  `github.com/umesh-network/umesh`) и бинарник (`wasmd` → `umeshd`);
+  `github.com/umesh-network/umesh`) и бинарник (`wasmd` → `umeshnode`);
 - применить патчи под SDK v0.54 посредством **Go AST-правок** (а не regex/sed) к
   `app/app.go`: удаление deprecated-модулей (`group`, `nft`, `crisis`), условное
   удаление IBC/upgrade/feegrant/authz/vesting/protocolpool, фикс порядка
@@ -81,8 +81,8 @@ go build -o umeshprep .
 | Каталог вывода | `-output-dir` | `OUTPUT_DIR` | `./src` | Куда сложить итоговое дерево |
 | Целевой модуль | `-target-module` | `TARGET_MODULE` | `github.com/umesh-network/umesh` | Новый путь Go-модуля |
 | Bech32-префикс | `-bech32-prefix` | `BECH32_PREFIX` | `umesh` | Префикс адресов (bech32) |
-| Home-каталог | `-node-dir` | `NODE_DIR` | `.umeshd` | Имя домашнего каталога ноды |
-| Имя бинаря | `-binary-name` | `BINARY_NAME` | `umeshd` | Результирующее имя бинаря |
+| Home-каталог | `-node-dir` | `NODE_DIR` | `.umeshnode` | Имя домашнего каталога ноды |
+| Имя бинаря | `-binary-name` | `BINARY_NAME` | `umeshnode` | Результирующее имя бинаря |
 | version.Name | `-version-name` | `VERSION_NAME` | `umesh` | Значение `version.Name` в Makefile |
 | Версия SDK | `-sdk-version` | `SDK_VERSION` | `v0.54.3` | Пин `cosmos-sdk` в `replace`/`go get` (только v0.54.x) |
 | Версия CometBFT | `-cometbft-version` | `COMETBFT_VERSION` | `v0.39.3` | Пин `cometbft` в `replace`/`go get` |
@@ -131,7 +131,7 @@ umeshprep
 ```bash
 umeshprep -output-dir ./src -wasmd-version v0.70.3 \
   -target-module github.com/umesh-network/umesh -bech32-prefix umesh \
-  -binary-name umeshd -sdk-version v0.54.3 -cometbft-version v0.39.3
+  -binary-name umeshnode -sdk-version v0.54.3 -cometbft-version v0.39.3
 ```
 
 С кастомной папкой и выключенной IBC:
@@ -158,7 +158,7 @@ go build ./...        # CGO_ENABLED=1 не забыть перед production-б
 | № | Шаг | Функция | Что делает |
 |---|-----|---------|-----------|
 | 1 | `clone wasmd` | `stepClone` | `git clone --branch <версия> --depth 1 <repo> <OUTPUT_DIR>`; **затирает** существующий `OUTPUT_DIR`; удаляет `.git` источника (история wasmd не нужна — финал дерева получает свой коммит) |
-| 2 | `rename module and binary` | `stepRename` | `cmd/<binary>` (wasmd→umeshd), замена пути модуля во всех `.go` и в `go.mod`, переименование литералов `AppName`/`DefaultNodeHome`/`Bech32Prefix`/`NodeDir`, попытка вытащить `appName` из `binaryName` (`umeshd`→`UmeshApp`) |
+| 2 | `rename module and binary` | `stepRename` | `cmd/<binary>` (wasmd→umeshnode), замена пути модуля во всех `.go` и в `go.mod`, переименование литералов `AppName`/`DefaultNodeHome`/`Bech32Prefix`/`NodeDir`, попытка вытащить `appName` из `binaryName` (`umeshnode`→`UmeshnodeApp`) |
 | 3 | `patch app for SDK v0.54` | `stepPatch` | AST-пач `app/app.go`: удаление deprecated/опциональных модулей, перестановка `EndBlockers` (bank первым), подмена `wasmkeeper.BuiltInCapabilities()` на хардкодированный набор capabilities |
 | 4 | `adjust go.mod` | `stepGomod` | `replace`-пины `cometbft`/`cosmos-sdk` + `go get`/`go mod tidy`; native `go` если на хосте есть, иначе через `docker run golang:1.25-alpine` с `--network=host -u <uid>:<gid>` |
 | 5 | `finalize` | `stepFinalize` | удаление `contrib`/`docs`/`testing` и `_test.go` (если `!keep-tests`); метка `.wasmd-baseline`; build gate `CGO_ENABLED=1 go build ./...` (если `!skip-build`); `git init -b main` + коммит `feat: initialize Umesh from wasmd <версия>` как `Umesh Bot` |
