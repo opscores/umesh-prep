@@ -3,7 +3,7 @@
 // It mirrors scripts/common/prepare-umesh-from-wasmd.sh as a standalone Go
 // tool: clone wasmd at a pinned version, rename the module, apply the Cosmos
 // SDK v0.54 patches via Go AST rewrites, run go mod tidy, and finalize the
-// result in OUTPUT_DIR (default: /src).
+// result in OUTPUT_DIR (default: ./src).
 //
 // Every option can be set as a flag, an environment variable, or a default
 // (priority: flag > env > default).
@@ -95,7 +95,7 @@ func parseConfig(args []string) (config, error) {
 	var (
 		wasmdVersion    = fs.String("wasmd-version", getEnv("WASMD_VERSION", "v0.70.3"), "wasmd version tag to clone")
 		wasmdRepo       = fs.String("wasmd-repo", getEnv("WASMD_REPO", "https://github.com/CosmWasm/wasmd.git"), "wasmd repository URL")
-		outputDir       = fs.String("output-dir", getEnv("OUTPUT_DIR", "/src"), "output directory for the derived source tree")
+		outputDir       = fs.String("output-dir", getEnv("OUTPUT_DIR", "./src"), "output directory for the derived source tree")
 		targetModule    = fs.String("target-module", getEnv("TARGET_MODULE", "github.com/umesh-network/umesh"), "Go module path of the Umesh fork")
 		bech32Prefix    = fs.String("bech32-prefix", getEnv("BECH32_PREFIX", "umesh"), "Bech32 account prefix")
 		nodeDir         = fs.String("node-dir", getEnv("NODE_DIR", ".umeshd"), "default node home directory name")

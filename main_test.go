@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"reflect"
 	"testing"
 )
@@ -88,5 +89,13 @@ func TestParseConfigRejectsPositionals(t *testing.T) {
 func TestParseConfigRejectsUnknownFlag(t *testing.T) {
 	if _, err := parseConfig([]string{"-bogus", "x"}); err == nil {
 		t.Error("expected error for unknown flag")
+	}
+}
+
+func TestParseConfigHelp(t *testing.T) {
+	for _, arg := range []string{"-h", "--help"} {
+		if _, err := parseConfig([]string{arg}); err != flag.ErrHelp {
+			t.Errorf("%s: err = %v, want flag.ErrHelp", arg, err)
+		}
 	}
 }

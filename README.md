@@ -78,7 +78,7 @@ go build -o umeshprep .
 | -------- | ---- | --- | ------------ | -------- |
 | Версия wasmd | `-wasmd-version` | `WASMD_VERSION` | `v0.70.3` | Тег wasmd для `git clone --branch` |
 | Репо wasmd | `-wasmd-repo` | `WASMD_REPO` | `https://github.com/CosmWasm/wasmd.git` | URL wasmd |
-| Каталог вывода | `-output-dir` | `OUTPUT_DIR` | `/src` | Куда сложить итоговое дерево |
+| Каталог вывода | `-output-dir` | `OUTPUT_DIR` | `./src` | Куда сложить итоговое дерево |
 | Целевой модуль | `-target-module` | `TARGET_MODULE` | `github.com/umesh-network/umesh` | Новый путь Go-модуля |
 | Bech32-префикс | `-bech32-prefix` | `BECH32_PREFIX` | `umesh` | Префикс адресов (bech32) |
 | Home-каталог | `-node-dir` | `NODE_DIR` | `.umeshd` | Имя домашнего каталога ноды |
@@ -120,7 +120,7 @@ go build -o umeshprep .
 
 ## 3. Быстрый старт
 
-Самый простой сценарий — собрать Umesh из wasmd по умолчанию в `/src`:
+Самый простой сценарий — собрать Umesh из wasmd по умолчанию в `./src`:
 
 ```bash
 umeshprep
@@ -129,7 +129,7 @@ umeshprep
 Эквивалентно:
 
 ```bash
-umeshprep -output-dir /src -wasmd-version v0.70.3 \
+umeshprep -output-dir ./src -wasmd-version v0.70.3 \
   -target-module github.com/umesh-network/umesh -bech32-prefix umesh \
   -binary-name umeshd -sdk-version v0.54.3 -cometbft-version v0.39.3
 ```
