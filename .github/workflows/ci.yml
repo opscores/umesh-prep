@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Vet
+        run: make vet
+
+      - name: Test
+        run: make test
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.12.2
+
+      - name: Build binary
+        run: make build
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          mv umeshprep dist/
+          cd dist
+          tar czf umeshprep-linux-amd64.tar.gz umeshprep
+          sha256sum umeshprep > umeshprep.sha256
+          sha256sum umeshprep-linux-amd64.tar.gz > umeshprep-linux-amd64.tar.gz.sha256
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v7.0.0
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Sign release assets
+        run: |
+          cd dist
+          gpg --batch --yes --detach-sign --armor -o umeshprep.asc umeshprep
+          gpg --batch --yes --detach-sign --armor -o umeshprep-linux-amd64.tar.gz.asc umeshprep-linux-amd64.tar.gz
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            dist/umeshprep
+            dist/umeshprep.asc
+            dist/umeshprep.sha256
+            dist/umeshprep-linux-amd64.tar.gz
+            dist/umeshprep-linux-amd64.tar.gz.asc
+            dist/umeshprep-linux-amd64.tar.gz.sha256
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

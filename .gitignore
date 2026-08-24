@@ -1,1 +1,17 @@
+# Build artifacts
 /umeshprep
+/dist/
+
+# Logs
+*.log
+
+# Test coverage
+.coverage*
+coverage.out
+
+# Tooling
+.codegraph/
+.opencoff/
+.graphifyignore
+AGENTS.md
+graphify-out/
