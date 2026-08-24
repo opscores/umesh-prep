@@ -73,7 +73,7 @@ func patchStringLiterals(root string, cfg config) error {
 	return nil
 }
 
-// appNameValue derives the BaseApp name from the binary name: umeshd -> UmeshApp.
+// appNameValue derives the BaseApp name from the binary name: umeshnode -> UmeshnodeApp.
 func appNameValue(cfg config) string {
 	name := strings.TrimSuffix(cfg.binaryName, "d")
 	if name == "" {
