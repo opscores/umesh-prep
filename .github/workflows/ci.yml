@@ -41,7 +41,6 @@ jobs:
           mv umeshprep dist/
           cd dist
           tar czf umeshprep-linux-amd64.tar.gz umeshprep
-          sha256sum umeshprep > umeshprep.sha256
           sha256sum umeshprep-linux-amd64.tar.gz > umeshprep-linux-amd64.tar.gz.sha256
 
       - name: Import GPG key
@@ -53,7 +52,6 @@ jobs:
       - name: Sign release assets
         run: |
           cd dist
-          gpg --batch --yes --detach-sign --armor -o umeshprep.asc umeshprep
           gpg --batch --yes --detach-sign --armor -o umeshprep-linux-amd64.tar.gz.asc umeshprep-linux-amd64.tar.gz
 
       - name: Publish release
@@ -61,8 +59,6 @@ jobs:
         with:
           files: |
             dist/umeshprep
-            dist/umeshprep.asc
-            dist/umeshprep.sha256
             dist/umeshprep-linux-amd64.tar.gz
             dist/umeshprep-linux-amd64.tar.gz.asc
             dist/umeshprep-linux-amd64.tar.gz.sha256
