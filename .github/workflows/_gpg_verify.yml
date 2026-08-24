@@ -1,0 +1,29 @@
+name: GPG Key Verify
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Import and test GPG key
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v7.0.0
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Sign and verify a test file
+        run: |
+          echo "gpg key verification" > gpg-test.txt
+          gpg --batch --yes --detach-sign --armor -o gpg-test.txt.asc gpg-test.txt
+          gpg --verify gpg-test.txt.asc gpg-test.txt
+          echo "=== secret key present ==="
+          gpg -K
