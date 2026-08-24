@@ -11,7 +11,7 @@ coverage.out
 
 # Tooling
 .codegraph/
-.opencoff/
+.opencode/
 .graphifyignore
 AGENTS.md
 graphify-out/
