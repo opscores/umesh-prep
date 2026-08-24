@@ -1,0 +1,21 @@
+# Generated output (README: utility writes into ./src and ./umesh-tree)
+/src/
+/umesh-tree/
+
+# Build artifacts
+/umeshprep
+/dist/
+
+# Logs
+*.log
+
+# Test coverage
+.coverage*
+coverage.out
+
+# Tooling
+.codegraph/
+.opencode/
+.graphifyignore
+AGENTS.md
+graphify-out/
